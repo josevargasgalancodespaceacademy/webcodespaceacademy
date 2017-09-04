@@ -1,0 +1,9 @@
+{
+    "name": "usuario2/webcodespaceacademy",
+    "require": {
+
+    	"phpmailer/phpmailer": "6.0.*",
+    	"robmorgan/phinx" : "0.9.*"
+
+    }
+}
