@@ -2,6 +2,7 @@
 
 require_once '../classes/mysql.php'; 
 require_once '../classes/validator.php';
+require_once '../classes/sanitizer.php';
 require_once '../config.php';
 
 $request = array(
@@ -10,12 +11,14 @@ $request = array(
 	"email" => "davidfisher24@gmail.com",
 	"telephone" => "633561928",
 	"date_of_birth" => "17/03/1982",
-	"type_identification" => "nie",
-	"number_identification" => "X9167956H",
+	"type_identification" => "dni",
+	"number_identification" => "77180224K",
 	"city" => "Malaga",
 	"linkedin" => "",
 	"comment" => "",
 );
+$sanitizer = new Sanitizer($request);
+$request = $sanitizer->sanitizeRequest();
 
 $validator = new Validator($request);
 $validator->filledIn("name")->length("name", "<=", 100);
@@ -27,17 +30,13 @@ $validator->filledIn("city")->length("city", "<=", 100);
 $validator->filledIn(array("type_identification","number_identification"))->length($request["type_identification"], "<=", 10)->spanish_id("number_identification",$request["type_identification"]);
 
 $errors = $validator->getErrors();
-/*foreach($errors as $key => $value) {
-	if(strstr($key, "|")) {
-		$key = str_replace("|", " and ", $key);
-	}
-	echo "Error on field $key<br>";
-}*/
+if ($errors) die(print_r("Errors"));
+
+$insertData = $request;
+$insertData["created"] = date('Y-m-d G:i:s');
 
 $mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
-// check that this person hasn't added before
-// upload and route the cv
-// add to the database
+$mysql->insertRow("promotion_entries",$insertData);
 
 
 

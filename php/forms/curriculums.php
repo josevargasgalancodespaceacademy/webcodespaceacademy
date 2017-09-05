@@ -2,6 +2,7 @@
 
 require_once '../classes/mysql.php'; 
 require_once '../classes/validator.php';
+require_once '../classes/sanitizer.php';
 require_once '../config.php';
 
 $request = array(
@@ -11,18 +12,23 @@ $request = array(
 	"website" => "www.davidfisher.com",
 	"linkedin" => "",
 );
+$sanitizer = new Sanitizer($request);
+$request = $sanitizer->sanitizeRequest();
 
 $validator = new Validator($request);
 $validator->filledIn("name")->length("name", "<=", 100);
 $validator->filledIn("email")->length("email", "<=", 100)->email("email");
-$validator->filledIn("telephone")->length("telephone", "<=", 15)->alphanumeric("telephone");
+$validator->filledIn("telephone")->length("telephone", "<=", 15);
 $errors = $validator->getErrors();
 
+$errors = $validator->getErrors();
+if ($errors) die(print_r($errors));
+
+$insertData = $request;
+$insertData["created"] = date('Y-m-d G:i:s');
 
 $mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
-// check that this person hasn't added before
-// upload and route the
-// add to the database
+$mysql->insertRow("curriculums",$insertData);
 
 
 

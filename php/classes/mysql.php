@@ -92,4 +92,15 @@ class Mysql
 		}
 		return $response;
 	}
+
+
+	function insertRow($tableName,$data) {
+		$columns = array_keys($data);
+		$values = array_values($data);
+		foreach ($values as $value) mysqli_real_escape_string($this->conn,$value);
+
+        $query = "INSERT INTO $tableName (".implode(',',$columns).") VALUES ('" . implode("', '", $values) . "' )";
+        $this->execute($query);
+	}
 }
+
