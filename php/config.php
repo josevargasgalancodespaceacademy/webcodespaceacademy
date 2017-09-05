@@ -17,7 +17,6 @@ $mini = false;
 $nonav = false; 
 error_reporting(0);
 
-require_once 'mysql.php'; 
-$mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
+
 
 ?>
