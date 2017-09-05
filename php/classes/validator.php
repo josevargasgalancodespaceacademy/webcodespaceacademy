@@ -41,6 +41,20 @@
 * //get errors as an array
 * $errors = $validator->getErrors();																											 
 *
+* ERROR CODES
+* 100 => Field is not filled in
+* 101 => Number of characters is incorrect
+* 102 => invalid email
+* 103 => Inputs fail to match
+* 104 => Length not in correct range
+* 105 => Punctuated characters in input
+* 106 => Value of integer is too short/long
+* 107 => Value of integer not in correct range
+* 108 => Alphabetic string contains invalid characters
+* 109 => Alphanumeric string contains invalid characters
+* 110 => Incorrect date format
+* 111 => Invalid Spanish identification number
+*
 ****************************************************************************************************/
 class Validator {
 	
@@ -482,7 +496,7 @@ class Validator {
 			 return $this;
 		}  
 		else {  
-			$this->setError($field, 113);
+			$this->setError($field, 111);
 			return $this;
 		} 
 	}

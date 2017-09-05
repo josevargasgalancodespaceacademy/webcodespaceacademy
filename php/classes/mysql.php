@@ -160,7 +160,7 @@ class Mysql
 		array_push($values,date('Y-m-d G:i:s'));
 
         $query = "INSERT INTO $tableName (".implode(',',$columns).") VALUES ('" . implode("', '", $values) . "' )";
-        $this->execute($query);
+        return $this->execute($query);
 	}
 
 	/**
