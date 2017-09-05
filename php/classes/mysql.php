@@ -1,5 +1,12 @@
 <?php
 
+/**
+* MySQL connection Class
+* Functions to connect to sql and run queries
+* 
+* @author  David Fisher <davidfisher@codespaceacademy.com>
+*/
+
 class Mysql 
 {
 	private $conn;
@@ -25,6 +32,14 @@ class Mysql
 		$this->disconnect();
 	}
 	
+	/**
+	 *
+	 * Creates sql connection
+	 *
+	 * @return $sql connections
+	 *
+	*/
+
 	function connect() {
 		if (!$this->conn) {
 			try {
@@ -46,12 +61,29 @@ class Mysql
  
 		return $this->conn;
 	}
+
+	/**
+	 *
+	 * Disconnects the sql connection
+	 *
+	 * @return void
+	 *
+	*/
  
 	function disconnect() {
 		if ($this->conn) {
 			$this->conn = null;
 		}
 	}
+
+	/**
+	 *
+	 * Executes a passed sql query and returns the first row found
+	 *
+	 * @param  string  $query  The query to run
+	 * @return array $response  The first row found
+	 *
+	*/
 	
 	function getOne($query) {
 		$result = $this->conn->prepare($query);
@@ -67,6 +99,15 @@ class Mysql
 		
 		return $reponse;
 	}
+
+	/**
+	 *
+	 * Executes a passed sql query and returns all found data
+	 *
+	 * @param  string  $query  The query to run
+	 * @return array $response  All rows found
+	 *
+	*/
 	
 	function getAll($query) {
 		$result = $this->conn->prepare($query);
@@ -82,6 +123,15 @@ class Mysql
 		
 		return $reponse;
 	}
+
+	/**
+	 *
+	 * Executes a passed sql query and returns response
+	 *
+	 * @param  string  $query  The query to run
+	 * @return response $response  SQL response
+	 *
+	*/
 	
 	function execute($query) {
 		if (!$response = $this->conn->exec($query)) {
@@ -93,14 +143,44 @@ class Mysql
 		return $response;
 	}
 
+	/**
+	 *
+	 * Builds a query to inserts a new sql row. Adds a "created" timestamp
+	 *
+	 * @param  string  $tableName  The table to insert the data to
+	 * @param  array  $data  $key => $value data to enter
+	 * @return void 
+	 *
+	*/
 
 	function insertRow($tableName,$data) {
 		$columns = array_keys($data);
 		$values = array_values($data);
-		foreach ($values as $value) mysqli_real_escape_string($this->conn,$value);
+		array_push($columns,"created");
+		array_push($values,date('Y-m-d G:i:s'));
 
         $query = "INSERT INTO $tableName (".implode(',',$columns).") VALUES ('" . implode("', '", $values) . "' )";
         $this->execute($query);
+	}
+
+	/**
+	 *
+	 * Check if row exists on an array of parameters
+	 *
+	 * @param  string  $tableName  The table to check
+	 * @param  array  $data    $key => $value data to check against
+	 * @return integer $count  Number of rows found for entered data  
+	 *
+	*/
+
+	function checkRowExists($tableName,$data) {
+        $query = "SELECT * FROM $tableName WHERE ";
+        foreach ($data as $key => $value) {
+        	$query .= "$key = '$value' OR ";
+        }
+
+        $result = $this->getAll(substr($query,0,-4));
+        return count($result);
 	}
 }
 

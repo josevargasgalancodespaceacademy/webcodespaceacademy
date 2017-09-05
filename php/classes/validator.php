@@ -15,26 +15,19 @@
 *
 * lengthBetween($field, $max, $min, $inclusive = false) -
 *
-* punctuation($field = null) -- returns false if there is punctuation in $field. If 
-*																argument left blank, checks all fields.
+* punctuation($field = null) -- returns false if there is punctuation in $field. If argument left blank, checks all fields.
 *
-* value($field, $operator, $value) -- similar to length(). however, checks an integer 
-*																		  field against arguments. Takes "<", ">", "<=", 
-*																			">=", "="	as operators and an integer as value.
+* value($field, $operator, $value) -- similar to length(). however, checks an integer field against arguments. Takes "<", ">", "<=", ">=", "="	as operators and an integer as value.
 *
-* valueBetween($field, $max, $min, $inclusive = false)  -- similar to lengthBetween().
-*																													 however, checks an integer
-*																													 field against max and min.
+* valueBetween($field, $max, $min, $inclusive = false)  -- similar to lengthBetween(). however, checks an integerfield against max and min.
 *
-* alpha($field = null) -- checks to see if $field contains only alphabetic characters. 
-*													If argument left blank, checks all fields.
+* alpha($field = null) -- checks to see if $field contains only alphabetic characters. If argument left blank, checks all fields.
 *
-* alphaNumeric($field = null) -- checks to see if $field contains only alphanumeric
-*																 characters. If argument left blank, checks all fields.
+* alphaNumeric($field = null) -- checks to see if $field contains only alphanumericcharacters. If argument left blank, checks all fields.
 *
-* date($field, $format) -- checks $field against specified format. acceptable date 
-*													 separators are "/", "-", and "." . day, month, and year are
-*													 specified as "d", "m", "y". eg. "dd/mm/yyyy" or "mm.yyyy"
+* spanish_id($field, $type) -- type is "dni" or "nie". Checks against the algorithm to see if the id number is valid
+*
+* date($field, $format) -- checks $field against specified format. acceptable date separators are "/", "-", and "." . day, month, and year are specified as "d", "m", "y". eg. "dd/mm/yyyy" or "mm.yyyy"
 *
 * Usage:
 * //instantiate
@@ -46,12 +39,7 @@
 * $validator->date("dateField", "dd.mm.yyyy");
 *
 * //get errors as an array
-* $errors = $validator->getErrors();
-*
-* //display errors however you see fit
-* //write errors to a database using $validator->getId() and then pass
-* //back to the form. Retrieve errors and display them back on the form.
-* //enjoy. 																													 
+* $errors = $validator->getErrors();																											 
 *
 ****************************************************************************************************/
 class Validator {

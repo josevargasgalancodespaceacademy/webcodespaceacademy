@@ -29,11 +29,9 @@ $errors = $validator->getErrors();
 $errors = $validator->getErrors();
 if ($errors) die(print_r($errors));
 
-$insertData = $request;
-$insertData["created"] = date('Y-m-d G:i:s');
 
 $mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
-$mysql->insertRow("company_contacts",$insertData);
+$mysql->insertRow("company_contacts",$request);
 
 
 
