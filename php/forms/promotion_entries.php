@@ -6,13 +6,13 @@ require_once '../classes/sanitizer.php';
 require_once '../config.php';
 
 $request = array(
-	"name" => "jaer",
+	"name" => "David",
 	"surnames" => "Fisher",
-	"email" => "jaer@gmail.com",
+	"email" => "davidfisher24@gmail.com",
 	"telephone" => "633561928",
 	"date_of_birth" => "1982/03/17",
-	"type_identification" => "dni",
-	"number_identification" => "47384970W",
+	"type_identification" => "nie",
+	"number_identification" => "X9167956H",
 	"city" => "La coruna",
 	"linkedin" => "",
 	"comment" => "",
@@ -30,7 +30,7 @@ $validator->filledIn("city")->length("city", "<=", 100);
 $validator->filledIn(array("type_identification","number_identification"))->length($request["type_identification"], "<=", 10)->spanish_id("number_identification",$request["type_identification"]);
 
 $errors = $validator->getErrors();
-if ($errors) die(print_r("Errors"));
+if ($errors) die(print_r($errors));
 
 $mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
 if ($mysql->checkRowExists("promotion_entries", array(

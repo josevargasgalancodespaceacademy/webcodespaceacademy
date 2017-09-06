@@ -56,6 +56,7 @@
 * 111 => Invalid Spanish identification number
 *
 ****************************************************************************************************/
+
 class Validator {
 	
 	var $validatorId;
@@ -64,9 +65,10 @@ class Validator {
 	var $errors = array();
 	var $request = array();
 	
-	function Validator($requestArray) {
+	function __construct ($requestArray) {
+		
 		$id = uniqid("");
-		$id = ereg_replace("[[:alpha:]]", "", $id);
+		$id = preg_replace("/[[:alpha:]]/", "", $id);
 		$id = strrev($id);
 		$id = substr($id, 0, 3);
 		if($id{0} == 0){
@@ -187,7 +189,7 @@ class Validator {
 	//valid email address
 	function email($field) {
 		$address = trim($this->request[$field]);
-		if (ereg('^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$', $address)){
+		if (preg_match('/^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$/', $address)){
 			return $this;
 		}	else {
 			$this->setError($field, 102);
@@ -237,7 +239,7 @@ class Validator {
 	function punctuation($field = null) {
 		if(is_array($field)) {
 			foreach ($field as $key => $value){
-				if(ereg("[[:punct:]]", $this->request[$value])) {
+				if(preg_match("/[[:punct:]]/", $this->request[$value])) {
 					$this->setError($value, 105);
 				} 
 			}
@@ -255,7 +257,7 @@ class Validator {
 			}
 		} elseif ($field == null){ 
 			foreach ($this->request as $key => $value) {
-				if(ereg("[[:punct:]]", $value)) {
+				if(preg_match("/[[:punct:]]/", $value)) {
 					$this->setError($key, 105);
 				}
 			}
@@ -272,7 +274,7 @@ class Validator {
 				return $this;
 			}
 		} else {
-			if(ereg("[[:punct:]]", $this->request[$field])) {
+			if(preg_match("/[[:punct:]]/", $this->request[$field])) {
 				$this->setError($field, 105);
 				return $this;
 			} else {
@@ -360,7 +362,7 @@ class Validator {
 			foreach ($field as $key => $value){
 				$strlen = strlen($this->request[$value]);
 				if($strlen > 0) {
-					if(!ereg("[[:alpha:]]\{$strlen}", $this->request[$value])) {
+					if(!preg_match("/[[:alpha:]]\{$strlen}/", $this->request[$value])) {
 						$this->setError($value, 108);
 					} 
 				}
@@ -381,7 +383,7 @@ class Validator {
 			foreach ($this->request as $key => $value) {
 				$strlen = strlen($value);
 				if($strlen > 0) {
-					if(!ereg("[[:alpha:]]\{$strlen}", $value)) {
+					if(!preg_match("/[[:alpha:]]\{$strlen}/", $value)) {
 						$this->setError($key, 108);
 					}
 				}
@@ -401,7 +403,7 @@ class Validator {
 		} else {
 			$strlen = strlen($this->request[$field]);
 			if($strlen > 0) {
-				if(ereg("[[:alpha:]]\{$strlen}", $this->request[$field])) {
+				if(preg_match("/[[:alpha:]]\{$strlen}/", $this->request[$field])) {
 					return $this;
 				} else {
 					$this->setError($field, 108);
@@ -417,7 +419,7 @@ class Validator {
 			foreach ($field as $key => $value){
 				$strlen = strlen($this->request[$value]);
 				if($strlen > 0) {
-					if(!ereg("[[:alnum:]]\{$strlen}", $this->request[$value])) {
+					if(!preg_match("/[[:alnum:]]\{$strlen}/", $this->request[$value])) {
 						$this->setError($value, 109);
 					} 
 				}
@@ -438,7 +440,7 @@ class Validator {
 			foreach ($this->request as $key => $value) {
 				$strlen = strlen($value);
 				if($strlen > 0) {
-					if(!ereg("[[:alnum:]]\{$strlen}", $value)) {
+					if(!preg_match("/[[:alnum:]]\{$strlen}/", $value)) {
 						$this->setError($key, 109);
 					}
 				}
@@ -458,7 +460,7 @@ class Validator {
 		} else {
 			$strlen = strlen($this->request[$field]);
 			if($strlen > 0) {
-				if(ereg("[[:alnum:]]\{$strlen}", $this->request[$field])) {
+				if(preg_match("/[[:alnum:]]\{$strlen}/", $this->request[$field])) {
 					return $this;
 				} else {
 					$this->setError($field, 109);

@@ -7,6 +7,7 @@
 * @author  David Fisher <davidfisher@codespaceacademy.com>
 */
 
+
 class Mysql 
 {
 	private $conn;
@@ -134,7 +135,9 @@ class Mysql
 	*/
 	
 	function execute($query) {
-		if (!$response = $this->conn->exec($query)) {
+		$query = $this->conn->prepare($query);
+		//if (!$response = $this->conn->exec($query)) {
+		if (!$response = $query->execute()) {
 			echo 'PDO::errorInfo():';
 		   echo '<br />';
 		   echo 'error SQL: '.$query;
@@ -182,5 +185,6 @@ class Mysql
         $result = $this->getAll(substr($query,0,-4));
         return count($result);
 	}
+
 }
 

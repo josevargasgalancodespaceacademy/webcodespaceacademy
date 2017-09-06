@@ -7,6 +7,7 @@
 * @author  David Fisher <davidfisher@codespaceacademy.com>
 */
 
+
 class Sanitizer
 {
 
@@ -71,10 +72,8 @@ class Sanitizer
 			if (get_magic_quotes_gpc()) {
 				$input = stripslashes($input);
 			}
-			$input  = $this->cleanInput($input);
-			$output = mysql_real_escape_string($input);
+			$output  = $this->cleanInput($input);
 		}
-		
 		return $output;
 	}
 

@@ -6,6 +6,7 @@ use PHPMailer\PHPMailer\Exception;
 require '../../vendor/autoload.php';
 require './../config.php';
 
+
 class Mailer
 {
 
