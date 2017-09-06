@@ -5,7 +5,7 @@ require_once '../classes/validator.php';
 require_once '../classes/sanitizer.php';
 require_once '../config.php';
 
-$request = array(
+/*$request = array(
 	"name" => "David",
 	"surnames" => "Fisher",
 	"email" => "davidfisher24@gmail.com",
@@ -16,7 +16,8 @@ $request = array(
 	"city" => "La coruna",
 	"linkedin" => "",
 	"comment" => "",
-);
+);*/
+parse_str($_SERVER['QUERY_STRING'],$request);
 $sanitizer = new Sanitizer($request);
 $request = $sanitizer->sanitizeRequest();
 
@@ -30,15 +31,15 @@ $validator->filledIn("city")->length("city", "<=", 100);
 $validator->filledIn(array("type_identification","number_identification"))->length($request["type_identification"], "<=", 10)->spanish_id("number_identification",$request["type_identification"]);
 
 $errors = $validator->getErrors();
-if ($errors) die(print_r($errors));
 
 $mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
 if ($mysql->checkRowExists("promotion_entries", array(
 	"email" => $request["email"],
 	"number_identification" => $request["number_identification"],
-)) > 0) die(print_r("Already exists"));
+)) > 0) $errors["general"] = "Los detalles puestos ya han sido entrado";
 
-$mysql->insertRow("promotion_entries",$request);
 
+if (!$errors) $mysql->insertRow("promotion_entries",$request);
+echo json_encode($errors);
 
 ?>

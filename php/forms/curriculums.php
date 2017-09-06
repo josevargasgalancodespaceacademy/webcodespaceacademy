@@ -5,16 +5,17 @@ require_once '../classes/validator.php';
 require_once '../classes/sanitizer.php';
 require_once '../config.php';
 
-$request = array(
+/*$request = array(
 	"name" => "David",
 	"email" => "davidfisher24@gmail.com",
 	"telephone" => "633561928",
 	"website" => "www.davidfisher.com",
 	"linkedin" => "",
-);
+);*/
+parse_str($_SERVER['QUERY_STRING'],$request);
 
+$file_upload_errors = array();
 if(isset($_FILES['curriculum'])){
-	$file_upload_errors= array();
 	$file_name = $_FILES['curriculum']['name']; 
 	$file_size = $_FILES['curriculum']['size']; 
 	$file_tmp = $_FILES['curriculum']['tmp_name']; 
@@ -34,8 +35,6 @@ if(isset($_FILES['curriculum'])){
 		$saved_file = $folder . $time . "-" . $file_name;
 		move_uploaded_file($file_tmp,$saved_file);
 		$request["route_curriculum_pdf"] = $file_name;
-	}else{
-		die(print_r($file_upload_errors));
 	}
 }
 
@@ -47,14 +46,16 @@ $validator = new Validator($request);
 $validator->filledIn("name")->length("name", "<=", 100);
 $validator->filledIn("email")->length("email", "<=", 100)->email("email");
 $validator->filledIn("telephone")->length("telephone", "<=", 15);
-$errors = $validator->getErrors();
-
-$errors = $validator->getErrors();
-if ($errors) die(print_r($errors));
+$errors = array_merge($validator->getErrors(),$file_upload_errors);
 
 
-$mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
-$mysql->insertRow("curriculums",$request);
+if (!$errors) {
+	$mysql = new Mysql(DB_SERVER,DB_USER,DB_PASSWORD,DB_NAME);
+	$mysql->insertRow("curriculums",$request);
+}
+
+echo json_encode($errors);
+
 
 
 

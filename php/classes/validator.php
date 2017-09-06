@@ -64,6 +64,21 @@ class Validator {
 	var $duplicate = false;
 	var $errors = array();
 	var $request = array();
+
+	var $error_messages = array(
+		100 => "Este campo es obligatorio",
+		101 => "Numero de caracters no es correcto",
+		102 => "Correo Electronico Invalido",
+		103 => "Inputs fail to match",
+		104 => "Length not in correct range",
+		105 => "Punctuated characters in input",
+		106 => "Value of integer is too short/long",
+		107 => "Value of integer not in correct range",
+		108 => "Alphabetic string contains invalid characters",
+		109 => "Alphanumeric string contains invalid characters",
+		110 => "Fecha es invalido",
+		111 => "Numero de identificacion no es valido",
+	);
 	
 	function __construct ($requestArray) {
 		
@@ -77,7 +92,18 @@ class Validator {
 		$this->validatorId = $id;
 		$this->request = $requestArray;
 	}
-	
+
+
+	// Setes text in place of codes for the error messages
+	function construct_error_messages() {
+		$errors = array();
+		foreach ($this->errors as $key => $error) {
+			$errors[$key] = $this->error_messages[$error];
+			
+		}
+		$this->errors = $errors;
+	}
+
 	//check if a field or fields are filled in 
 	//ERROR: 100
 	function filledIn($field = null) {
@@ -641,6 +667,7 @@ class Validator {
 	
 	//get validation errors
 	function getErrors() {
+		$this->construct_error_messages();
 		return $this->errors;
 	}
 	
